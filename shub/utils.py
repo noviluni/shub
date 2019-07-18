@@ -105,6 +105,8 @@ def make_deploy_request(url, data, files, auth, verbose, keep_log):
                          '\n---------- END OF REMOTE TRACEBACK ----------')
         except (ValueError, TypeError, KeyError):
             error = rsp.text or "Status %d" % rsp.status_code
+        if error == 'project: non_field_errors' and rsp.status_code == 400:
+            error += '\nHint: Are you logged in with the correct API key?'
         msg = "Deploy failed ({}):\n{}".format(rsp.status_code, error)
         raise RemoteErrorException(msg)
     except requests.RequestException as exc:
