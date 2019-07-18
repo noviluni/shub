@@ -105,7 +105,9 @@ def make_deploy_request(url, data, files, auth, verbose, keep_log):
                          '\n---------- END OF REMOTE TRACEBACK ----------')
         except (ValueError, TypeError, KeyError):
             error = rsp.text or "Status %d" % rsp.status_code
-        msg = "Deploy failed ({}):\n{}".format(rsp.status_code, error)
+        msg = "Deploy failed ({}) for project {}:\n{}".format(
+            rsp.status_code, data['project'], error
+        )
         raise RemoteErrorException(msg)
     except requests.RequestException as exc:
         raise RemoteErrorException("Deploy failed: {}".format(exc))
